@@ -1,25 +1,32 @@
 import productModel from "../models/productModel.js"
 
 const productController = {
-    findAll: (req, res) => {
-        res.status(200).json({
-            message: "Meu primeiro servidor " + "Produto 1",
-            response: {
-                name: "Smartphone 1",
-                price: 3000,
-                description: "LOREM IPSUM",
-                code: "2",
-                image: ""
-            }
-        })
+    findAll: async (req, res) => {
+        try {
+            const result = await productModel.find({})
+            const product = result.toObject()
+            res.status(200).json({
+                message: "Meu primeiro servidor " + "Produto 1",
+                response: product
+            })
+        } catch (error) {
+            res.status(400).json({
+                message: "Não foi possivel inserir o produto"
+            })
+        }
     },
 
-    insertOne: (req, res) => {
-        (req, res) => {
-            const product = req.body
+    insertOne: async (req, res) => {
+        try {
+            const result = await productModel.create(req.body)
+            const product = result.toObject()
             res.json({
                 status: 200,
                 response: product
+            })
+        } catch (error) {
+            res.status(400).json({
+                message: "Não foi possivel inserir o produto"
             })
         }
     },
